@@ -1,0 +1,4 @@
+DIAMONDS = "♦"
+CLUBS = "♣"
+HEARTS = "♥"
+SPADES = "♠"

@@ -132,8 +132,8 @@ class TableCardGroup(pygame.sprite.Group):
     Consists of attack cards and defend cards.
     """
 
-    def __init__(self, *cards, spacing=30):
-        super().__init__(*cards)
+    def __init__(self, spacing=30):
+        super().__init__()
         self.spacing = spacing
         self.cards = {}
         self.current_position = 0

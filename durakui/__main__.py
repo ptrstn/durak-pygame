@@ -2,7 +2,7 @@ import sys
 
 import pygame
 
-from durakui.card import TableCardGroup
+from durakui.cards import TableCardGroup
 from durakui.settings import SCREEN_WIDTH, SCREEN_HEIGHT
 
 

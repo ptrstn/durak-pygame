@@ -1,6 +1,8 @@
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 400
 
+TABLE_BACKGROUND_COLOR = "lightgreen"
+
 CARD_FONT_SIZE = 28
 CARD_SUIT_FONT_SIZE = int(CARD_FONT_SIZE * 1.2)
 CARD_CENTER_FONT_SIZE = int(CARD_FONT_SIZE * 2)
@@ -15,12 +17,11 @@ CARD_CORNER_TEXT_MARGIN_LEFT = 2.5
 CARD_CORNER_TEXT_MARGIN_TOP = 0
 CARD_RADIUS = 5
 CARD_BORDER = 1
-CARD_ANGLE = -15
+CARD_DEFEND_ANGLE = -12.5
 
-CARD_FONT_NAME = "Helvetica"  # "Helvetica"  # "Tahoma" "dejavuserif"
-CARD_SUIT_FONT_NAME = "monospace"  # "Helvetica"  # "Tahoma" "dejavuserif"
+CARD_FONT_NAME = "Helvetica"  # "Helvetica" "Tahoma" "dejavuserif"
+CARD_SUIT_FONT_NAME = "monospace"  # "Helvetica" "Tahoma" "dejavuserif"
 
-BACKGROUND_COLOR = "lightgreen"
 CARD_BACKGROUND_COLOR = "white"
 CARD_BORDER_COLOR = "LightSlateGray"
 CARD_BORDER_HOVER_COLOR = "red"

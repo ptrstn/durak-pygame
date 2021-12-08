@@ -1,5 +1,6 @@
 import pygame
 
+from durakui.constants import HAMMER_AND_SICKLE, COMMUNIST_RED, COMMUNIST_YELLOW
 from durakui.settings import (
     CARD_BACKGROUND_COLOR,
     CARD_WIDTH,
@@ -19,6 +20,8 @@ from durakui.settings import (
     CARD_SUIT_FONT_SIZE,
     CARD_CENTER_FONT_SIZE,
     CARD_DEFEND_ANGLE,
+    HAND_CARD_SPACING,
+    TABLE_CARD_SPACING,
 )
 
 pygame.init()
@@ -29,10 +32,13 @@ class BaseCard(pygame.sprite.Sprite):
     Represents an empty card
     """
 
-    def __init__(self, width=CARD_WIDTH, height=CARD_HEIGHT):
+    def __init__(
+        self, width=CARD_WIDTH, height=CARD_HEIGHT, base_color=CARD_BACKGROUND_COLOR
+    ):
         super().__init__()
         self.width = width
         self.height = height
+        self.base_color = base_color
         self.image = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
         self.rect = self.image.get_rect()
         self._draw_base_card()
@@ -40,14 +46,14 @@ class BaseCard(pygame.sprite.Sprite):
     def _draw_base_card(self):
         pygame.draw.rect(
             self.image,
-            color=CARD_BACKGROUND_COLOR,
-            rect=pygame.Rect(0, 0, self.width, self.height),
+            color=self.base_color,
+            rect=self.rect,
             border_radius=CARD_RADIUS,
         )
         pygame.draw.rect(
             self.image,
             color=CARD_BORDER_COLOR,
-            rect=pygame.Rect(0, 0, CARD_WIDTH, CARD_HEIGHT),
+            rect=self.rect,
             border_radius=CARD_RADIUS,
             width=1,
         )
@@ -102,7 +108,7 @@ class Card(BaseCardFront):
             text_suit_surface,
             (
                 CARD_CORNER_TEXT_MARGIN_LEFT,
-                CARD_CORNER_TEXT_MARGIN_TOP + CARD_FONT_SIZE,
+                CARD_CORNER_TEXT_MARGIN_TOP + CARD_FONT_SIZE - 5,
             ),
         )
 
@@ -126,13 +132,59 @@ class AngledCard(Card):
         self.image = pygame.transform.rotate(self.image, angle=angle)
 
 
+class CardBack(BaseCard):
+    FONT_CENTER = pygame.font.SysFont("DejaVu Sans", CARD_CENTER_FONT_SIZE)
+
+    def __init__(self, base_color="WhiteSmoke", symbol=HAMMER_AND_SICKLE):
+        super().__init__(base_color=base_color)
+        inner_rectangle = pygame.Rect(
+            0,
+            0,
+            self.width - 25,
+            self.height - 25,
+        )
+        inner_rectangle.center = self.rect.center
+
+        pygame.draw.rect(
+            self.image, color=COMMUNIST_RED, rect=inner_rectangle, border_radius=5
+        )
+
+        inner_inner_rectangle = pygame.Rect(
+            0,
+            0,
+            self.width - 40,
+            self.height - 40,
+        )
+        inner_inner_rectangle.center = self.rect.center
+
+        pygame.draw.rect(
+            self.image,
+            color=COMMUNIST_YELLOW,
+            rect=inner_inner_rectangle,
+            width=2,
+        )
+
+        symbol_surface = CardBack.FONT_CENTER.render(symbol, True, COMMUNIST_YELLOW)
+        symbol_surface_rect = symbol_surface.get_rect(
+            center=(CARD_WIDTH / 2, CARD_HEIGHT / 2)
+        )
+
+        self.image.blit(symbol_surface, symbol_surface_rect)
+
+
+class AngledCardBack(CardBack):
+    def __init__(self, angle=-12.5):
+        super().__init__()
+        self.image = pygame.transform.rotate(self.image, angle=angle)
+
+
 class TableCardGroup(pygame.sprite.Group):
     """
     Represents the cards that were put on the table.
     Consists of attack cards and defend cards.
     """
 
-    def __init__(self, spacing=30):
+    def __init__(self, spacing=TABLE_CARD_SPACING):
         super().__init__()
         self.spacing = spacing
         self.cards = {}
@@ -143,9 +195,9 @@ class TableCardGroup(pygame.sprite.Group):
         for position, card_pair in self.cards.items():
             for card_type, card_dict in card_pair.items():
                 card = card_dict.get("card")
-                card.rect.center = (
-                    card.width + (card.width + self.spacing) * position,
-                    card.height,
+                card.rect.topleft = (
+                    (card.width + self.spacing) * position,
+                    0,
                 )
                 card.update()
 
@@ -187,3 +239,44 @@ class TableCardGroup(pygame.sprite.Group):
         super().empty()
         self.cards = {}
         self.current_position = 0
+
+
+def split_suit_value(suit_value):
+    return suit_value[0], suit_value[1:]
+
+
+class Hand(pygame.sprite.Group):
+    def __init__(self, suit_value_pairs: list, spacing=HAND_CARD_SPACING):
+        super().__init__()
+        self.spacing = spacing
+        self.cards = [Card(*suit_value_pair) for suit_value_pair in suit_value_pairs]
+        self.add(self.cards)
+
+    def update(self) -> None:
+        for idx, card in enumerate(self.cards):
+            card.rect.topleft = (
+                (card.width + self.spacing) * idx,
+                0,
+            )
+            card.update()
+
+
+class OpponentHand(pygame.sprite.Group):
+    def __init__(self, number_of_cards, angle=15):
+        super().__init__()
+        self.number_of_cards = number_of_cards
+        self.angle = angle
+        self.cards = [
+            AngledCardBack(angle=self.angle * idx)
+            for idx in range(0, self.number_of_cards)
+            # CardBack() for idx in range(0, self.number_of_cards)
+        ]
+        self.add(self.cards)
+
+    # def update(self) -> None:
+    #     for idx, card in enumerate(self.cards):
+    #         card.rect.topleft = (
+    #             (card.width + self.spacing) * idx,
+    #             0,
+    #         )
+    #         card.update()

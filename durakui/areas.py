@@ -1,5 +1,6 @@
 import pygame
 
+from durakui.cards import TableCardGroup, Hand, OpponentHand
 from durakui.settings import (
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
@@ -42,6 +43,8 @@ class TableArea(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.image.fill("Blue")
 
+        self.table = TableCardGroup()
+
 
 class DeckArea(pygame.sprite.Sprite):
     def __init__(self):
@@ -62,6 +65,8 @@ class HandArea(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.image.fill("Pink")
 
+        self.hand = Hand([])
+
 
 class OpponentHandArea(pygame.sprite.Sprite):
     def __init__(self):
@@ -71,3 +76,5 @@ class OpponentHandArea(pygame.sprite.Sprite):
         self.image = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
         self.rect = self.image.get_rect()
         self.image.fill("Purple")
+
+        self.opponent_hand = OpponentHand(6)

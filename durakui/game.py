@@ -10,22 +10,15 @@ from durakui.areas import (
     OpponentHandArea,
 )
 from durakui.cards import (
-    Hand,
     AngledCard,
     CardBack,
-    TableCardGroup,
-    OpponentHand,
 )
 from durakui.constants import HEARTS
+from durakui.mocks import mock_table, mock_hand
 from durakui.settings import (
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
     SCREEN_TITLE,
-    CARD_WIDTH,
-    CARD_HEIGHT,
-    TABLE_CARD_SPACING,
-    MAX_NUMBER_OF_TABLE_CARDS,
-    HAND_CARD_SPACING,
 )
 
 
@@ -36,17 +29,14 @@ class DurakGame:
         pygame.display.set_caption(title)
         self.clock = pygame.time.Clock()
 
-        self.table = TableCardGroup()
-        self.hand = Hand([])
-        self.opponent_hand = OpponentHand(6)
-
         self.background_area = BackgroundArea()
         self.table_area = TableArea()
         self.deck_area = DeckArea()
         self.hand_area = HandArea()
         self.opponent_hand_area = OpponentHandArea()
 
-        self._init_cards()
+        mock_table(self.table_area.table)
+        mock_hand(self.hand_area.hand)
 
         self.hand_area.rect.centerx = self.screen_rect.centerx
         self.hand_area.rect.bottom = self.screen_rect.bottom
@@ -70,21 +60,6 @@ class DurakGame:
         self.deck_area.image.blit(self.trump_card.image, self.trump_card.rect)
         self.deck_area.image.blit(self.deck_card.image, self.deck_card.rect)
 
-    def _init_cards(self):
-        self.table.attack("♠", "2")
-        self.table.attack("♠", "8")
-        self.table.defend("♠", "2", "♠", "10")
-        self.table.attack("♦", "A")
-        self.table.attack("♠", "9")
-        self.table.defend("♦", "A", "♣", "2")
-        self.table.attack("♥", "K")
-        self.table.attack("♠", "3")
-        self.table.defend("♠", "3", "♥", "J")
-
-        self.hand = Hand(
-            [("♠", "A"), ("♦", "7"), ("♥", "7"), ("♠", "4"), ("♠", "5"), ("♠", "6")]
-        )
-
     def run(self):
         while True:
             for event in pygame.event.get():
@@ -92,9 +67,9 @@ class DurakGame:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONUP:
-                    self.table.attack("♠", "2")
+                    self.table_area.table.attack("♠", "2")
                 if event.type == pygame.MOUSEWHEEL:
-                    self.table.empty()
+                    self.table_area.table.empty()
 
             self.screen.blit(self.background_area.image, (0, 0))
             self.screen.blit(self.table_area.image, self.table_area.rect)
@@ -104,14 +79,14 @@ class DurakGame:
                 self.opponent_hand_area.image, self.opponent_hand_area.rect
             )
 
-            self.hand.update()
-            self.hand.draw(self.hand_area.image)
+            self.hand_area.hand.update()
+            self.hand_area.hand.draw(self.hand_area.image)
 
-            self.table.update()
-            self.table.draw(self.table_area.image)
+            self.table_area.table.update()
+            self.table_area.table.draw(self.table_area.image)
 
-            self.opponent_hand.update()
-            self.opponent_hand.draw(self.opponent_hand_area.image)
+            self.opponent_hand_area.opponent_hand.update()
+            self.opponent_hand_area.opponent_hand.draw(self.opponent_hand_area.image)
 
             pygame.display.update()
             self.clock.tick(60)  # max 60 loops per second

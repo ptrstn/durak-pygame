@@ -22,6 +22,8 @@ from durakui.settings import (
     CARD_DEFEND_ANGLE,
     HAND_CARD_SPACING,
     TABLE_CARD_SPACING,
+    TRUMP_CARD_ANGLE,
+    TRUMP_CARD_OFFSET,
 )
 
 pygame.init()
@@ -267,13 +269,31 @@ class Hand(pygame.sprite.Group):
 
 
 class OpponentHand(pygame.sprite.Group):
-    def __init__(self, number_of_cards, angle=15):
+    def __init__(self, angle=15):
         super().__init__()
-        self.number_of_cards = number_of_cards
+        self.number_of_cards = 0
         self.angle = angle
-        self.set_hand(number_of_cards)
 
     def set_hand(self, number_of_cards: int):
         self.empty()
+        self.number_of_cards = number_of_cards
         for idx in range(0, number_of_cards):
             self.add(AngledCardBack(angle=self.angle * idx))
+
+
+class Deck(pygame.sprite.Group):
+    def __init__(self):
+        super().__init__()
+        self.deck_card = CardBack()
+        self.trump_card = BaseCard()
+
+    def set_trump_card(self, suit, value):
+        self.trump_card = AngledCard(suit, value, angle=TRUMP_CARD_ANGLE)
+        self.trump_card.rect.x = TRUMP_CARD_OFFSET
+        self.trump_card.rect.y = (self.trump_card.height - self.trump_card.width) / 2
+        self.empty()
+        self.add(self.trump_card)
+        self.add(self.deck_card)
+
+    def remove_deck_card(self):
+        self.remove(self.deck_card)

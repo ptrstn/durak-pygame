@@ -9,12 +9,7 @@ from durakui.areas import (
     HandArea,
     OpponentHandArea,
 )
-from durakui.cards import (
-    AngledCard,
-    CardBack,
-)
-from durakui.constants import HEARTS
-from durakui.mocks import mock_table, mock_hand
+from durakui.mocks import mock_table, mock_hand, mock_deck, mock_opponent_hand
 from durakui.settings import (
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
@@ -37,6 +32,8 @@ class DurakGame:
 
         mock_table(self.table_area.table)
         mock_hand(self.hand_area.hand)
+        mock_deck(self.deck_area.deck)
+        mock_opponent_hand(self.opponent_hand_area.opponent_hand)
 
         self.hand_area.rect.centerx = self.screen_rect.centerx
         self.hand_area.rect.bottom = self.screen_rect.bottom
@@ -49,16 +46,12 @@ class DurakGame:
         self.deck_area.rect.centery = self.screen_rect.centery
         self.deck_area.rect.x = 10
 
-        self.deck_card = CardBack()
-        self.deck_card.rect.x = 0
-        self.deck_card.rect.y = 0
-
-        self.trump_card = AngledCard(HEARTS, "5", angle=90)
-        self.trump_card.rect.x = 12
-        self.trump_card.rect.y = (self.trump_card.height - self.trump_card.width) / 2
-
-        self.deck_area.image.blit(self.trump_card.image, self.trump_card.rect)
-        self.deck_area.image.blit(self.deck_card.image, self.deck_card.rect)
+        self.deck_area.image.blit(
+            self.deck_area.deck.trump_card.image, self.deck_area.deck.trump_card.rect
+        )
+        self.deck_area.image.blit(
+            self.deck_area.deck.deck_card.image, self.deck_area.deck.deck_card.rect
+        )
 
     def run(self):
         while True:

@@ -1,6 +1,6 @@
 import pygame
 
-from durakui.cards import TableCardGroup, Hand, OpponentHand
+from durakui.cards import TableCardGroup, Hand, OpponentHand, Deck
 from durakui.settings import (
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
@@ -8,6 +8,7 @@ from durakui.settings import (
     CARD_HEIGHT,
     TABLE_CARD_SPACING,
     MAX_NUMBER_OF_TABLE_CARDS,
+    TRUMP_CARD_OFFSET,
 )
 
 BACKGROUND_AREA_WIDTH = SCREEN_WIDTH
@@ -19,7 +20,6 @@ HAND_AREA_HEIGHT = CARD_HEIGHT * 1.15
 OPPONENT_HAND_AREA_WIDTH = CARD_WIDTH * 2
 OPPONENT_HAND_AREA_HEIGHT = CARD_HEIGHT * 1.3
 
-TRUMP_CARD_OFFSET = 12
 DECK_AREA_WIDTH = CARD_HEIGHT + TRUMP_CARD_OFFSET
 DECK_AREA_HEIGHT = CARD_HEIGHT
 
@@ -55,6 +55,8 @@ class DeckArea(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.image.fill("Green")
 
+        self.deck = Deck()
+
 
 class HandArea(pygame.sprite.Sprite):
     def __init__(self):
@@ -65,7 +67,7 @@ class HandArea(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.image.fill("Pink")
 
-        self.hand = Hand([])
+        self.hand = Hand()
 
 
 class OpponentHandArea(pygame.sprite.Sprite):
@@ -77,4 +79,4 @@ class OpponentHandArea(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.image.fill("Purple")
 
-        self.opponent_hand = OpponentHand(6)
+        self.opponent_hand = OpponentHand()

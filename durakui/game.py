@@ -2,20 +2,25 @@ import sys
 
 import pygame
 
+from durakui.areas import (
+    TableArea,
+    BackgroundArea,
+    DeckArea,
+    HandArea,
+    OpponentHandArea,
+)
 from durakui.cards import (
-    TableCardGroup,
     Hand,
     AngledCard,
-    BaseCard,
     CardBack,
+    TableCardGroup,
     OpponentHand,
 )
-from durakui.constants import SPADES, CLUBS, HEARTS
+from durakui.constants import HEARTS
 from durakui.settings import (
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
     SCREEN_TITLE,
-    TABLE_BACKGROUND_COLOR,
     CARD_WIDTH,
     CARD_HEIGHT,
     TABLE_CARD_SPACING,
@@ -35,46 +40,24 @@ class DurakGame:
         self.hand = Hand([])
         self.opponent_hand = OpponentHand(6)
 
+        self.background_area = BackgroundArea()
+        self.table_area = TableArea()
+        self.deck_area = DeckArea()
+        self.hand_area = HandArea()
+        self.opponent_hand_area = OpponentHandArea()
+
         self._init_cards()
 
-        self.background = pygame.Surface((width, height))
-        self.background.fill("Maroon")  # "Maroon"
+        self.hand_area.rect.centerx = self.screen_rect.centerx
+        self.hand_area.rect.bottom = self.screen_rect.bottom
 
-        self.hand_area = pygame.Surface(
-            ((CARD_WIDTH + HAND_CARD_SPACING) * len(self.hand), CARD_HEIGHT * 1.15),
-            pygame.SRCALPHA,
-        )
-        # self.hand_area.fill("blue")
-        self.hand_area_rect = self.hand_area.get_rect()
-        self.hand_area_rect.centerx = self.screen_rect.centerx
-        self.hand_area_rect.bottom = self.screen_rect.bottom
+        self.opponent_hand_area.rect.centerx = self.screen_rect.centerx
 
-        self.opponent_area = pygame.Surface(
-            (CARD_WIDTH * 2, CARD_HEIGHT * 2), pygame.SRCALPHA
-        )
-        # self.hand_area.fill("blue")
-        self.opponent_area_rect = self.opponent_area.get_rect()
-        self.opponent_area_rect.centerx = self.screen_rect.centerx
+        self.table_area.rect.center = self.screen_rect.center
+        self.table_area.rect.centerx += 50
 
-        self.table_area = pygame.Surface(
-            (
-                (CARD_WIDTH + TABLE_CARD_SPACING) * MAX_NUMBER_OF_TABLE_CARDS,
-                CARD_HEIGHT * 1.15,
-            ),
-            pygame.SRCALPHA,
-        )
-        # self.table_area.fill("red")
-        self.table_area_rect = self.table_area.get_rect()
-        self.table_area_rect.center = self.screen_rect.center
-        self.table_area_rect.centerx += 50
-
-        self.deck_area = pygame.Surface(
-            (CARD_HEIGHT + 12, CARD_HEIGHT), pygame.SRCALPHA
-        )
-        # self.deck_area.fill("lightblue")
-        self.deck_area_rect = self.deck_area.get_rect()
-        self.deck_area_rect.centery = self.screen_rect.centery
-        self.deck_area_rect.x = 10
+        self.deck_area.rect.centery = self.screen_rect.centery
+        self.deck_area.rect.x = 10
 
         self.deck_card = CardBack()
         self.deck_card.rect.x = 0
@@ -84,8 +67,8 @@ class DurakGame:
         self.trump_card.rect.x = 12
         self.trump_card.rect.y = (self.trump_card.height - self.trump_card.width) / 2
 
-        self.deck_area.blit(self.trump_card.image, self.trump_card.rect)
-        self.deck_area.blit(self.deck_card.image, self.deck_card.rect)
+        self.deck_area.image.blit(self.trump_card.image, self.trump_card.rect)
+        self.deck_area.image.blit(self.deck_card.image, self.deck_card.rect)
 
     def _init_cards(self):
         self.table.attack("♠", "2")
@@ -113,20 +96,22 @@ class DurakGame:
                 if event.type == pygame.MOUSEWHEEL:
                     self.table.empty()
 
-            self.screen.blit(self.background, (0, 0))
-            self.screen.blit(self.table_area, self.table_area_rect)
-            self.screen.blit(self.deck_area, self.deck_area_rect)
-            self.screen.blit(self.hand_area, self.hand_area_rect)
-            self.screen.blit(self.opponent_area, self.opponent_area_rect)
+            self.screen.blit(self.background_area.image, (0, 0))
+            self.screen.blit(self.table_area.image, self.table_area.rect)
+            self.screen.blit(self.deck_area.image, self.deck_area.rect)
+            self.screen.blit(self.hand_area.image, self.hand_area.rect)
+            self.screen.blit(
+                self.opponent_hand_area.image, self.opponent_hand_area.rect
+            )
 
             self.hand.update()
-            self.hand.draw(self.hand_area)
+            self.hand.draw(self.hand_area.image)
 
             self.table.update()
-            self.table.draw(self.table_area)
+            self.table.draw(self.table_area.image)
 
             self.opponent_hand.update()
-            self.opponent_hand.draw(self.opponent_area)
+            self.opponent_hand.draw(self.opponent_hand_area.image)
 
             pygame.display.update()
             self.clock.tick(60)  # max 60 loops per second

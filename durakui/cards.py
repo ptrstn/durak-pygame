@@ -246,19 +246,24 @@ def split_suit_value(suit_value):
 
 
 class Hand(pygame.sprite.Group):
-    def __init__(self, suit_value_pairs: list, spacing=HAND_CARD_SPACING):
+    def __init__(self, suit_value_pairs: list = None, spacing=HAND_CARD_SPACING):
         super().__init__()
         self.spacing = spacing
-        self.cards = [Card(*suit_value_pair) for suit_value_pair in suit_value_pairs]
-        self.add(self.cards)
+        self.set_hand(suit_value_pairs)
 
     def update(self) -> None:
-        for idx, card in enumerate(self.cards):
+        for idx, card in enumerate(self.sprites()):
             card.rect.topleft = (
                 (card.width + self.spacing) * idx,
                 0,
             )
             card.update()
+
+    def set_hand(self, suit_value_pairs: list):
+        if suit_value_pairs:
+            self.empty()
+            for suit_value_pair in suit_value_pairs:
+                self.add(Card(*suit_value_pair))
 
 
 class OpponentHand(pygame.sprite.Group):
@@ -266,17 +271,9 @@ class OpponentHand(pygame.sprite.Group):
         super().__init__()
         self.number_of_cards = number_of_cards
         self.angle = angle
-        self.cards = [
-            AngledCardBack(angle=self.angle * idx)
-            for idx in range(0, self.number_of_cards)
-            # CardBack() for idx in range(0, self.number_of_cards)
-        ]
-        self.add(self.cards)
+        self.set_hand(number_of_cards)
 
-    # def update(self) -> None:
-    #     for idx, card in enumerate(self.cards):
-    #         card.rect.topleft = (
-    #             (card.width + self.spacing) * idx,
-    #             0,
-    #         )
-    #         card.update()
+    def set_hand(self, number_of_cards: int):
+        self.empty()
+        for idx in range(0, number_of_cards):
+            self.add(AngledCardBack(angle=self.angle * idx))

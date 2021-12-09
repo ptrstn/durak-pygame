@@ -26,3 +26,24 @@ def mock_table(table: TableCardGroup):
 def mock_deck(deck: Deck):
     trump = ("♥", "5")
     deck.set_trump_card(*trump)
+
+
+def mock_attack(table: TableCardGroup, id: int):
+    if id == 0:
+        table.attack("♠", "2")
+    if id == 1:
+        table.attack("♠", "8")
+    if id == 2:
+        table.defend("♠", "2", "♠", "10")
+    if id == 3:
+        table.attack("♦", "A")
+    if id == 4:
+        table.attack("♠", "9")
+    if id == 5:
+        table.defend("♦", "A", "♣", "2")
+    if id == 6:
+        table.attack("♥", "K")
+    if id == 7:
+        table.attack("♠", "3")
+    if id == 8:
+        table.defend("♠", "3", "♥", "J")

@@ -9,7 +9,13 @@ from durakui.areas import (
     HandArea,
     OpponentHandArea,
 )
-from durakui.mocks import mock_table, mock_hand, mock_deck, mock_opponent_hand
+from durakui.mocks import (
+    mock_table,
+    mock_hand,
+    mock_deck,
+    mock_opponent_hand,
+    mock_attack,
+)
 from durakui.settings import (
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
@@ -35,34 +41,33 @@ class DurakGame:
         mock_deck(self.deck_area.deck)
         mock_opponent_hand(self.opponent_hand_area.opponent_hand)
 
-        self.hand_area.rect.centerx = self.screen_rect.centerx
-        self.hand_area.rect.bottom = self.screen_rect.bottom
+        self.hand_area.rect.centerx = self.background_area.rect.centerx
+        self.hand_area.rect.bottom = self.background_area.rect.bottom
 
-        self.opponent_hand_area.rect.centerx = self.screen_rect.centerx
+        self.opponent_hand_area.rect.centerx = self.background_area.rect.centerx
 
-        self.table_area.rect.center = self.screen_rect.center
+        self.table_area.rect.center = self.background_area.rect.center
         self.table_area.rect.centerx += 50
 
-        self.deck_area.rect.centery = self.screen_rect.centery
+        self.deck_area.rect.centery = self.background_area.rect.centery
         self.deck_area.rect.x = 10
 
-        self.deck_area.image.blit(
-            self.deck_area.deck.trump_card.image, self.deck_area.deck.trump_card.rect
-        )
-        self.deck_area.image.blit(
-            self.deck_area.deck.deck_card.image, self.deck_area.deck.deck_card.rect
-        )
-
     def run(self):
+        click_counter = 0
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONUP:
-                    self.table_area.table.attack("♠", "2")
+                    mock_attack(self.table_area.table, click_counter)
+                    click_counter += 1
                 if event.type == pygame.MOUSEWHEEL:
                     self.table_area.table.empty()
+                    self.table_area.table.clear(
+                        self.table_area.image, TableArea().image
+                    )
+                    click_counter = 0
 
             self.screen.blit(self.background_area.image, (0, 0))
             self.screen.blit(self.table_area.image, self.table_area.rect)
@@ -71,6 +76,9 @@ class DurakGame:
             self.screen.blit(
                 self.opponent_hand_area.image, self.opponent_hand_area.rect
             )
+
+            self.deck_area.deck.update()
+            self.deck_area.deck.draw(self.deck_area.image)
 
             self.hand_area.hand.update()
             self.hand_area.hand.draw(self.hand_area.image)

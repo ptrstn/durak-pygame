@@ -57,6 +57,11 @@ class DeckArea(pygame.sprite.Sprite):
 
         self.deck = Deck()
 
+    def update(self, *args, **kwargs):
+        super().update(*args, **kwargs)
+        self.deck.update()
+        self.deck.draw(self.image)
+
 
 class HandArea(pygame.sprite.Sprite):
     def __init__(self):

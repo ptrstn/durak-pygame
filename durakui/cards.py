@@ -193,7 +193,7 @@ class TableCardGroup(pygame.sprite.Group):
         self.current_position = 0
         self.update()
 
-    def update(self) -> None:
+    def update(self):
         for position, card_pair in self.cards.items():
             for card_type, card_dict in card_pair.items():
                 card = card_dict.get("card")
@@ -237,7 +237,7 @@ class TableCardGroup(pygame.sprite.Group):
         }
         self.add(defend_card)
 
-    def empty(self) -> None:
+    def empty(self):
         super().empty()
         self.cards = {}
         self.current_position = 0
@@ -253,7 +253,7 @@ class Hand(pygame.sprite.Group):
         self.spacing = spacing
         self.set_hand(suit_value_pairs)
 
-    def update(self) -> None:
+    def update(self):
         for idx, card in enumerate(self.sprites()):
             card.rect.topleft = (
                 (card.width + self.spacing) * idx,

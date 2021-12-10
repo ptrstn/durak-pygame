@@ -24,7 +24,10 @@ from durakui.settings import (
     TABLE_CARD_SPACING,
     TRUMP_CARD_ANGLE,
     TRUMP_CARD_OFFSET,
+    CARD_DIAGONAL,
+    OPPONENT_CARD_ANGLE,
 )
+from durakui.utils import calculate_rotation_offset, elementwise_add
 
 pygame.init()
 
@@ -49,13 +52,13 @@ class BaseCard(pygame.sprite.Sprite):
         pygame.draw.rect(
             self.image,
             color=self.base_color,
-            rect=self.rect,
+            rect=pygame.rect.Rect(0, 0, self.width, self.height),
             border_radius=CARD_RADIUS,
         )
         pygame.draw.rect(
             self.image,
             color=CARD_BORDER_COLOR,
-            rect=self.rect,
+            rect=pygame.rect.Rect(0, 0, self.width, self.height),
             border_radius=CARD_RADIUS,
             width=1,
         )
@@ -129,7 +132,7 @@ class Card(BaseCardFront):
 
 
 class AngledCard(Card):
-    def __init__(self, suit, value, angle=-12.5):
+    def __init__(self, suit, value, angle):
         super().__init__(suit, value)
         self.image = pygame.transform.rotate(self.image, angle=angle)
 
@@ -175,9 +178,19 @@ class CardBack(BaseCard):
 
 
 class AngledCardBack(CardBack):
-    def __init__(self, angle=-12.5):
+    def __init__(self, angle):
         super().__init__()
-        self.image = pygame.transform.rotate(self.image, angle=angle)
+        self.original = self.image
+        self.image = pygame.transform.rotate(self.original, angle=angle)
+        self.pivot = (0, CARD_HEIGHT)
+        self.offset = calculate_rotation_offset(
+            self.original, angle=angle, pivot=self.pivot
+        )
+        self.rect = self.image.get_rect(
+            topleft=elementwise_add(
+                (CARD_DIAGONAL, CARD_DIAGONAL - CARD_HEIGHT), self.offset
+            )
+        )
 
 
 class TableCardGroup(pygame.sprite.Group):
@@ -269,7 +282,7 @@ class Hand(pygame.sprite.Group):
 
 
 class OpponentHand(pygame.sprite.Group):
-    def __init__(self, angle=15):
+    def __init__(self, angle=OPPONENT_CARD_ANGLE):
         super().__init__()
         self.number_of_cards = 0
         self.angle = angle
@@ -277,8 +290,11 @@ class OpponentHand(pygame.sprite.Group):
     def set_hand(self, number_of_cards: int):
         self.empty()
         self.number_of_cards = number_of_cards
+        start_angle = int(number_of_cards / 2 + 1) * (self.angle)
         for idx in range(0, number_of_cards):
-            self.add(AngledCardBack(angle=self.angle * idx))
+            angle = start_angle - self.angle * idx
+            card = AngledCardBack(angle=angle)
+            self.add(card)
 
 
 class Deck(pygame.sprite.Group):

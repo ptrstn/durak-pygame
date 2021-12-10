@@ -7,7 +7,7 @@ def mock_hand(hand: Hand):
 
 
 def mock_opponent_hand(opponent_hand: OpponentHand):
-    opponent_hand.set_hand(6)
+    opponent_hand.set_hand(12)
 
 
 def mock_table(table: TableCardGroup):

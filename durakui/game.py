@@ -70,12 +70,12 @@ class DurakGame:
                     click_counter = 0
 
             self.screen.blit(self.background_area.image, (0, 0))
-            self.screen.blit(self.table_area.image, self.table_area.rect)
-            self.screen.blit(self.deck_area.image, self.deck_area.rect)
-            self.screen.blit(self.hand_area.image, self.hand_area.rect)
             self.screen.blit(
                 self.opponent_hand_area.image, self.opponent_hand_area.rect
             )
+            self.screen.blit(self.table_area.image, self.table_area.rect)
+            self.screen.blit(self.deck_area.image, self.deck_area.rect)
+            self.screen.blit(self.hand_area.image, self.hand_area.rect)
 
             self.deck_area.deck.update()
             self.deck_area.deck.draw(self.deck_area.image)

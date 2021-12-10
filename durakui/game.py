@@ -1,6 +1,7 @@
 import sys
 
 import pygame
+from pygame.sprite import Group
 
 from durakui.areas import (
     BattlefieldArea,
@@ -23,7 +24,7 @@ from durakui.settings import (
 )
 
 
-class DurakGame(pygame.sprite.Group):
+class DurakGame(Group):
     def __init__(self, width=SCREEN_WIDTH, height=SCREEN_HEIGHT, title=SCREEN_TITLE):
         self.screen = pygame.display.set_mode((width, height))
         self.screen_rect = self.screen.get_rect()

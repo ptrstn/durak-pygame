@@ -1,4 +1,6 @@
 import pygame
+from pygame.sprite import Sprite, Group
+from pygame.surface import Surface
 
 from durakui.constants import HAMMER_AND_SICKLE, COMMUNIST_RED, COMMUNIST_YELLOW
 from durakui.settings import (
@@ -32,7 +34,7 @@ from durakui.utils import calculate_rotation_offset, elementwise_add
 pygame.init()
 
 
-class BaseCard(pygame.sprite.Sprite):
+class BaseCard(Sprite):
     """
     Represents an empty card
     """
@@ -44,7 +46,7 @@ class BaseCard(pygame.sprite.Sprite):
         self.width = width
         self.height = height
         self.base_color = base_color
-        self.image = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
+        self.image = Surface((self.width, self.height), pygame.SRCALPHA)
         self.rect = self.image.get_rect()
         self._draw_base_card()
 
@@ -193,7 +195,7 @@ class AngledCardBack(CardBack):
         )
 
 
-class Battlefield(pygame.sprite.Group):
+class Battlefield(Group):
     """
     Represents the cards that were put on the table.
     Consists of attack cards and defend cards.
@@ -260,7 +262,7 @@ def split_suit_value(suit_value):
     return suit_value[0], suit_value[1:]
 
 
-class Hand(pygame.sprite.Group):
+class Hand(Group):
     def __init__(self, suit_value_pairs: list = None, spacing=HAND_CARD_SPACING):
         super().__init__()
         self.spacing = spacing
@@ -281,7 +283,7 @@ class Hand(pygame.sprite.Group):
                 self.add(Card(*suit_value_pair))
 
 
-class OpponentHand(pygame.sprite.Group):
+class OpponentHand(Group):
     def __init__(self, angle=OPPONENT_CARD_ANGLE):
         super().__init__()
         self.number_of_cards = 0
@@ -297,7 +299,7 @@ class OpponentHand(pygame.sprite.Group):
             self.add(card)
 
 
-class Deck(pygame.sprite.Group):
+class Deck(Group):
     def __init__(self):
         super().__init__()
         self.deck_card = CardBack()

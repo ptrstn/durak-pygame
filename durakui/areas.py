@@ -1,4 +1,5 @@
 import pygame
+from pygame.sprite import Sprite
 
 from durakui.cards import Battlefield, Hand, OpponentHand, Deck
 from durakui.settings import (
@@ -25,7 +26,7 @@ DECK_AREA_WIDTH = CARD_HEIGHT + TRUMP_CARD_OFFSET
 DECK_AREA_HEIGHT = CARD_HEIGHT
 
 
-class BackgroundArea(pygame.sprite.Sprite):
+class BackgroundArea(Sprite):
     def __init__(self):
         super().__init__()
         self.width = BACKGROUND_AREA_WIDTH
@@ -35,10 +36,12 @@ class BackgroundArea(pygame.sprite.Sprite):
         self.image.fill("Maroon")
 
 
-class BattlefieldArea(pygame.sprite.Sprite):
+class BattlefieldArea(Sprite):
     def __init__(self):
         super().__init__()
-        self.width = (CARD_WIDTH + BATTLEFIELD_CARD_SPACING) * MAX_NUMBER_OF_ATTACK_CARDS
+        self.width = (
+            CARD_WIDTH + BATTLEFIELD_CARD_SPACING
+        ) * MAX_NUMBER_OF_ATTACK_CARDS
         self.height = CARD_HEIGHT * 1.15
         self.image = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
         self.rect = self.image.get_rect()
@@ -47,7 +50,7 @@ class BattlefieldArea(pygame.sprite.Sprite):
         self.battlefield = Battlefield()
 
 
-class DeckArea(pygame.sprite.Sprite):
+class DeckArea(Sprite):
     def __init__(self):
         super().__init__()
         self.width = DECK_AREA_WIDTH
@@ -64,7 +67,7 @@ class DeckArea(pygame.sprite.Sprite):
         self.deck.draw(self.image)
 
 
-class HandArea(pygame.sprite.Sprite):
+class HandArea(Sprite):
     def __init__(self):
         super().__init__()
         self.width = HAND_AREA_WIDTH
@@ -76,7 +79,7 @@ class HandArea(pygame.sprite.Sprite):
         self.hand = Hand()
 
 
-class OpponentHandArea(pygame.sprite.Sprite):
+class OpponentHandArea(Sprite):
     def __init__(self):
         super().__init__()
         self.width = OPPONENT_HAND_AREA_WIDTH

@@ -14,7 +14,7 @@ from durakui.mocks import (
     mock_hand,
     mock_deck,
     mock_opponent_hand,
-    mock_attack,
+    mock_action,
 )
 from durakui.settings import (
     SCREEN_WIDTH,
@@ -60,7 +60,7 @@ class DurakGame:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONUP:
-                    mock_attack(self.table_area.table, click_counter)
+                    mock_action(self, click_counter)
                     click_counter += 1
                 if event.type == pygame.MOUSEWHEEL:
                     self.table_area.table.empty()

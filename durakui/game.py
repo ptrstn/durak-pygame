@@ -23,7 +23,7 @@ from durakui.settings import (
 )
 
 
-class DurakGame:
+class DurakGame(pygame.sprite.Group):
     def __init__(self, width=SCREEN_WIDTH, height=SCREEN_HEIGHT, title=SCREEN_TITLE):
         self.screen = pygame.display.set_mode((width, height))
         self.screen_rect = self.screen.get_rect()

@@ -1,13 +1,13 @@
 import pygame
 
-from durakui.cards import TableCardGroup, Hand, OpponentHand, Deck
+from durakui.cards import Battlefield, Hand, OpponentHand, Deck
 from durakui.settings import (
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
     CARD_WIDTH,
     CARD_HEIGHT,
-    TABLE_CARD_SPACING,
-    MAX_NUMBER_OF_TABLE_CARDS,
+    BATTLEFIELD_CARD_SPACING,
+    MAX_NUMBER_OF_ATTACK_CARDS,
     TRUMP_CARD_OFFSET,
     CARD_DIAGONAL,
 )
@@ -35,16 +35,16 @@ class BackgroundArea(pygame.sprite.Sprite):
         self.image.fill("Maroon")
 
 
-class TableArea(pygame.sprite.Sprite):
+class BattlefieldArea(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.width = (CARD_WIDTH + TABLE_CARD_SPACING) * MAX_NUMBER_OF_TABLE_CARDS
+        self.width = (CARD_WIDTH + BATTLEFIELD_CARD_SPACING) * MAX_NUMBER_OF_ATTACK_CARDS
         self.height = CARD_HEIGHT * 1.15
         self.image = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
         self.rect = self.image.get_rect()
         self.image.fill("Blue")
 
-        self.table = TableCardGroup()
+        self.battlefield = Battlefield()
 
 
 class DeckArea(pygame.sprite.Sprite):

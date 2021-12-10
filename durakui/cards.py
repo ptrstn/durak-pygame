@@ -21,7 +21,7 @@ from durakui.settings import (
     CARD_CENTER_FONT_SIZE,
     CARD_DEFEND_ANGLE,
     HAND_CARD_SPACING,
-    TABLE_CARD_SPACING,
+    BATTLEFIELD_CARD_SPACING,
     TRUMP_CARD_ANGLE,
     TRUMP_CARD_OFFSET,
     CARD_DIAGONAL,
@@ -193,13 +193,13 @@ class AngledCardBack(CardBack):
         )
 
 
-class TableCardGroup(pygame.sprite.Group):
+class Battlefield(pygame.sprite.Group):
     """
     Represents the cards that were put on the table.
     Consists of attack cards and defend cards.
     """
 
-    def __init__(self, spacing=TABLE_CARD_SPACING):
+    def __init__(self, spacing=BATTLEFIELD_CARD_SPACING):
         super().__init__()
         self.spacing = spacing
         self.cards = {}

@@ -3,14 +3,14 @@ import sys
 import pygame
 
 from durakui.areas import (
-    TableArea,
+    BattlefieldArea,
     BackgroundArea,
     DeckArea,
     HandArea,
     OpponentHandArea,
 )
 from durakui.mocks import (
-    mock_table,
+    mock_battlefield,
     mock_hand,
     mock_deck,
     mock_opponent_hand,
@@ -31,12 +31,12 @@ class DurakGame(pygame.sprite.Group):
         self.clock = pygame.time.Clock()
 
         self.background_area = BackgroundArea()
-        self.table_area = TableArea()
+        self.battlefield_area = BattlefieldArea()
         self.deck_area = DeckArea()
         self.hand_area = HandArea()
         self.opponent_hand_area = OpponentHandArea()
 
-        mock_table(self.table_area.table)
+        mock_battlefield(self.battlefield_area.battlefield)
         mock_hand(self.hand_area.hand)
         mock_deck(self.deck_area.deck)
         mock_opponent_hand(self.opponent_hand_area.opponent_hand)
@@ -46,8 +46,8 @@ class DurakGame(pygame.sprite.Group):
 
         self.opponent_hand_area.rect.centerx = self.background_area.rect.centerx
 
-        self.table_area.rect.center = self.background_area.rect.center
-        self.table_area.rect.centerx += 50
+        self.battlefield_area.rect.center = self.background_area.rect.center
+        self.battlefield_area.rect.centerx += 50
 
         self.deck_area.rect.centery = self.background_area.rect.centery
         self.deck_area.rect.x = 10
@@ -63,9 +63,9 @@ class DurakGame(pygame.sprite.Group):
                     mock_action(self, click_counter)
                     click_counter += 1
                 if event.type == pygame.MOUSEWHEEL:
-                    self.table_area.table.empty()
-                    self.table_area.table.clear(
-                        self.table_area.image, TableArea().image
+                    self.battlefield_area.battlefield.empty()
+                    self.battlefield_area.battlefield.clear(
+                        self.battlefield_area.image, BattlefieldArea().image
                     )
                     click_counter = 0
 
@@ -73,7 +73,7 @@ class DurakGame(pygame.sprite.Group):
             self.screen.blit(
                 self.opponent_hand_area.image, self.opponent_hand_area.rect
             )
-            self.screen.blit(self.table_area.image, self.table_area.rect)
+            self.screen.blit(self.battlefield_area.image, self.battlefield_area.rect)
             self.screen.blit(self.deck_area.image, self.deck_area.rect)
             self.screen.blit(self.hand_area.image, self.hand_area.rect)
 
@@ -83,8 +83,8 @@ class DurakGame(pygame.sprite.Group):
             self.hand_area.hand.update()
             self.hand_area.hand.draw(self.hand_area.image)
 
-            self.table_area.table.update()
-            self.table_area.table.draw(self.table_area.image)
+            self.battlefield_area.battlefield.update()
+            self.battlefield_area.battlefield.draw(self.battlefield_area.image)
 
             self.opponent_hand_area.opponent_hand.update()
             self.opponent_hand_area.opponent_hand.draw(self.opponent_hand_area.image)

@@ -1,9 +1,9 @@
-from durakui.game import DurakGame
+from durakui.view import DurakView
 
 
 def main():
-    game = DurakGame()
-    game.run()
+    view = DurakView()
+    view.run()
 
 
 if __name__ == "__main__":

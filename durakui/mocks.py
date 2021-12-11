@@ -1,84 +1,102 @@
-from durakui.areas import OpponentHandArea, HandArea, DeckArea
-from durakui.cards import Hand, Battlefield, Deck, OpponentHand
+from durakui.view import DurakTable
 
 
-def mock_hand(hand: Hand):
-    mock_data = [("♠", "A"), ("♦", "7"), ("♥", "7"), ("♠", "4"), ("♠", "5"), ("♠", "6")]
-    hand.set_hand(mock_data)
+def mock_table_action(table: DurakTable, id):
+    if id == 0:
+        table.set_trump_card("♣", "4")
 
-
-def mock_opponent_hand(opponent_hand: OpponentHand):
-    opponent_hand.set_hand(12)
-
-
-def mock_battlefield(battlefield: Battlefield):
-    battlefield.empty()
-    battlefield.attack("♠", "2")
-    battlefield.attack("♠", "8")
-    battlefield.defend("♠", "2", "♠", "10")
-    battlefield.attack("♦", "A")
-    battlefield.attack("♠", "9")
-    battlefield.defend("♦", "A", "♣", "2")
-    battlefield.attack("♥", "K")
-    battlefield.attack("♠", "3")
-    battlefield.defend("♠", "3", "♥", "J")
-
-
-def mock_deck(deck: Deck):
-    trump = ("♥", "5")
-    deck.set_trump_card(*trump)
-
-
-def mock_action(game, id: int):
-    battlefield = game.battlefield_area.battlefield
-    opponent_hand = game.opponent_hand_area.opponent_hand
-
-    def clear_opponent_hand():
-        opponent_hand.empty()
-        game.opponent_hand_area.opponent_hand.clear(
-            game.opponent_hand_area.image, OpponentHandArea().image
+        table.set_hand(
+            [
+                ("♦", "10"),
+                ("♠", "3"),
+                ("♥", "Q"),
+                ("♣", "8"),
+                ("♣", "J"),
+                ("♣", "K"),
+            ]
         )
 
-    hand = game.hand_area.hand
-    deck = game.deck_area.deck
+        table.set_opponent_hand(6)
 
-    if id == 0:
-        clear_opponent_hand()
-        opponent_hand.set_hand(5)
-        battlefield.attack("♠", "2")
-    if id == 1:
-        clear_opponent_hand()
-        opponent_hand.set_hand(4)
-        battlefield.attack("♠", "8")
-    if id == 2:
-        battlefield.defend("♠", "2", "♠", "10")
-    if id == 3:
-        clear_opponent_hand()
-        opponent_hand.set_hand(3)
-        battlefield.attack("♦", "A")
-    if id == 4:
-        clear_opponent_hand()
-        opponent_hand.set_hand(2)
-        battlefield.attack("♠", "9")
-    if id == 5:
-        battlefield.defend("♦", "A", "♣", "2")
-    if id == 6:
-        clear_opponent_hand()
-        opponent_hand.set_hand(1)
-        battlefield.attack("♥", "K")
-    if id == 7:
-        clear_opponent_hand()
-        opponent_hand.set_hand(0)
-        battlefield.attack("♠", "3")
-    if id == 8:
-        battlefield.defend("♠", "3", "♥", "J")
-    if id == 9:
-        game.deck_area.deck.clear(game.deck_area.image, DeckArea().image)
-        deck.remove_deck_card()
-        opponent_hand.set_hand(1)
-    if id == 10:
-        hand.empty()
-        game.hand_area.hand.clear(game.hand_area.image, HandArea().image)
-        hand.set_hand([("♥", "5")])
-        deck.empty()
-        game.deck_area.deck.clear(game.deck_area.image, DeckArea().image)
+    elif id == 1:
+        table.attack("♦", "2")
+        table.set_opponent_hand(table.opponent_hand.number_of_cards - 1)
+    elif id == 2:
+        table.defend("♦", "2", "♦", "10")
+        table.set_hand(
+            [
+                ("♠", "3"),
+                ("♥", "Q"),
+                ("♣", "8"),
+                ("♣", "J"),
+                ("♣", "K"),
+            ]
+        )
+    elif id == 3:
+        table.attack("♥", "10")
+        table.attack("♥", "2")
+        table.set_opponent_hand(table.opponent_hand.number_of_cards - 2)
+    elif id == 4:
+        table.defend("♥", "10", "♣", "8")
+        table.set_hand(
+            [
+                ("♠", "3"),
+                ("♥", "Q"),
+                ("♣", "J"),
+                ("♣", "K"),
+            ]
+        )
+    elif id == 5:
+        table.defend("♥", "2", "♥", "Q")
+        table.set_hand(
+            [
+                ("♠", "3"),
+                ("♣", "J"),
+                ("♣", "K"),
+            ]
+        )
+    elif id == 6:
+        table.attack("♣", "2")
+        table.set_opponent_hand(table.opponent_hand.number_of_cards - 1)
+    elif id == 7:
+        table.defend("♣", "2", "♣", "J")
+        table.set_hand(
+            [
+                ("♠", "3"),
+                ("♣", "K"),
+            ]
+        )
+    elif id == 8:
+        table.attack("♠", "2")
+        table.set_opponent_hand(table.opponent_hand.number_of_cards - 1)
+    elif id == 9:
+        table.defend("♠", "2", "♠", "3")
+        table.set_hand(
+            [
+                ("♣", "K"),
+            ]
+        )
+    elif id == 10:
+        table.attack("♣", "3")
+        table.set_opponent_hand(table.opponent_hand.number_of_cards - 1)
+    elif id == 11:
+        table.defend("♣", "3", "♣", "K")
+        table.set_hand([])
+    elif id == 12:
+        table.clear_battlefield()
+    elif id == 13:
+        table.set_opponent_hand(6)
+    elif id == 14:
+        table.set_hand(
+            [
+                ("♦", "7"),
+                ("♠", "7"),
+                ("♥", "7"),
+            ]
+        )
+        table.remove_deck_card()
+    elif id == 15:
+        table.set_hand([("♦", "7"), ("♠", "7"), ("♥", "7"), ("♣", "4")])
+        table.remove_trump_card()
+    elif id == 16:
+        table.reset()

@@ -1,5 +1,5 @@
 import pygame
-from pygame.sprite import Sprite, Group
+from pygame.sprite import Sprite, Group, OrderedUpdates, LayeredUpdates
 from pygame.surface import Surface
 
 from durakui.constants import HAMMER_AND_SICKLE, COMMUNIST_RED, COMMUNIST_YELLOW
@@ -268,8 +268,8 @@ class Hand(Group):
         self.set_hand(suit_value_pairs)
 
     def set_hand(self, suit_value_pairs: list):
+        self.empty()
         if suit_value_pairs:
-            self.empty()
             for position, suit_value_pair in enumerate(suit_value_pairs):
                 card = Card(*suit_value_pair)
                 card.rect.topleft = (
@@ -295,19 +295,35 @@ class OpponentHand(Group):
             self.add(card)
 
 
-class Deck(Group):
+class Deck(LayeredUpdates):
+    """
+    Represents a decking, consisting of deck cover card and trump card.
+    LayeredUpdates is necessary to move the deck cover card to front.
+    """
+
     def __init__(self):
         super().__init__()
         self.deck_card = CardBack()
-        self.trump_card = BaseCard()
+        self.add(self.deck_card)
+        self.trump_card = None
 
     def set_trump_card(self, suit, value):
+        self.remove(self.trump_card)
         self.trump_card = AngledCard(suit, value, angle=TRUMP_CARD_ANGLE)
         self.trump_card.rect.x = TRUMP_CARD_OFFSET
         self.trump_card.rect.y = (self.trump_card.height - self.trump_card.width) / 2
-        self.empty()
         self.add(self.trump_card)
-        self.add(self.deck_card)
+        self.move_to_front(self.deck_card)
 
     def remove_deck_card(self):
         self.remove(self.deck_card)
+        self.deck_card = None
+
+    def remove_trump_card(self):
+        self.remove(self.trump_card)
+        self.trump_card = None
+
+    def add_deck_card(self):
+        if not self.deck_card:
+            self.deck_card = CardBack()
+            self.add(self.deck_card)

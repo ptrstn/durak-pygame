@@ -206,17 +206,6 @@ class Battlefield(Group):
         self.spacing = spacing
         self.cards = {}
         self.current_position = 0
-        self.update()
-
-    def update(self):
-        for position, card_pair in self.cards.items():
-            for card_type, card_dict in card_pair.items():
-                card = card_dict.get("card")
-                card.rect.topleft = (
-                    (card.width + self.spacing) * position,
-                    0,
-                )
-                card.update()
 
     def _init_card_dict_attack_position(self, position):
         self.cards[position] = {
@@ -225,15 +214,20 @@ class Battlefield(Group):
 
     def attack(self, suit, value):
         card = Card(suit, value)
-        position = self.current_position
-        self._init_card_dict_attack_position(position)
-        self.cards[position]["attack"] = {
+        self._init_card_dict_attack_position(self.current_position)
+        self.cards[self.current_position]["attack"] = {
             "suit": suit,
             "value": value,
             "card": card,
         }
-        self.current_position += 1
+
+        card.rect.topleft = (
+            (card.width + self.spacing) * self.current_position,
+            0,
+        )
+
         self.add(card)
+        self.current_position += 1
 
     def _find_attack_position(self, suit, value):
         for position, card_pair in self.cards.items():
@@ -244,12 +238,17 @@ class Battlefield(Group):
 
     def defend(self, attack_suit, attack_value, defend_suit, defend_value):
         defend_card = AngledCard(defend_suit, defend_value, angle=CARD_DEFEND_ANGLE)
-        position = self._find_attack_position(attack_suit, attack_value)
-        self.cards[position]["defend"] = {
+        defend_position = self._find_attack_position(attack_suit, attack_value)
+        self.cards[defend_position]["defend"] = {
             "suit": defend_suit,
             "value": defend_value,
             "card": defend_card,
         }
+
+        defend_card.rect.topleft = (
+            (defend_card.width + self.spacing) * defend_position,
+            0,
+        )
         self.add(defend_card)
 
     def empty(self):
@@ -268,19 +267,16 @@ class Hand(Group):
         self.spacing = spacing
         self.set_hand(suit_value_pairs)
 
-    def update(self):
-        for idx, card in enumerate(self.sprites()):
-            card.rect.topleft = (
-                (card.width + self.spacing) * idx,
-                0,
-            )
-            card.update()
-
     def set_hand(self, suit_value_pairs: list):
         if suit_value_pairs:
             self.empty()
-            for suit_value_pair in suit_value_pairs:
-                self.add(Card(*suit_value_pair))
+            for position, suit_value_pair in enumerate(suit_value_pairs):
+                card = Card(*suit_value_pair)
+                card.rect.topleft = (
+                    (card.width + self.spacing) * position,
+                    0,
+                )
+                self.add(card)
 
 
 class OpponentHand(Group):

@@ -2,6 +2,10 @@
 
 # Durak pygame GUI
 
+Dummy [Durak](https://en.wikipedia.org/wiki/Durak) GUI implemented in pygame with no functionality.
+
+![gameplay](docs/gameplay.gif)
+
 ## Installation
 
 ```bash

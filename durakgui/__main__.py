@@ -1,4 +1,4 @@
-from durakui.view import DurakView
+from durakgui.view import DurakView
 
 
 def main():

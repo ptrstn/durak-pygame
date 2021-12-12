@@ -1,13 +1,13 @@
 from pygame.sprite import Group
 
-from durakui.backgrounds import (
+from durakgui.backgrounds import (
     BattlefieldBackground,
     DeckBackground,
     HandBackground,
     OpponentBackground,
     TableBackground,
 )
-from durakui.cards import Battlefield, Hand, Deck, OpponentHand
+from durakgui.cards import Battlefield, Hand, Deck, OpponentHand
 
 
 class DurakTable(Group):

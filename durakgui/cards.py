@@ -2,8 +2,8 @@ import pygame
 from pygame.sprite import Sprite, Group, OrderedUpdates, LayeredUpdates
 from pygame.surface import Surface
 
-from durakui.constants import HAMMER_AND_SICKLE, COMMUNIST_RED, COMMUNIST_YELLOW
-from durakui.settings import (
+from durakgui.constants import HAMMER_AND_SICKLE, COMMUNIST_RED, COMMUNIST_YELLOW
+from durakgui.settings import (
     CARD_BACKGROUND_COLOR,
     CARD_WIDTH,
     CARD_HEIGHT,
@@ -29,7 +29,7 @@ from durakui.settings import (
     CARD_DIAGONAL,
     OPPONENT_CARD_ANGLE,
 )
-from durakui.utils import calculate_rotation_offset, elementwise_add
+from durakgui.utils import calculate_rotation_offset, elementwise_add
 
 pygame.init()
 

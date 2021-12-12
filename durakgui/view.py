@@ -2,13 +2,13 @@ import sys
 
 import pygame
 
-from durakui.settings import (
+from durakgui.settings import (
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
     SCREEN_TITLE,
     FRAMES_PER_SECOND,
 )
-from durakui.table import DurakTable
+from durakgui.table import DurakTable
 
 
 class DurakView:
@@ -29,7 +29,7 @@ class DurakView:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONUP:
-                    from durakui.mocks import mock_table_action
+                    from durakgui.mocks import mock_table_action
 
                     mock_table_action(self.table, click_counter)
                     click_counter += 1

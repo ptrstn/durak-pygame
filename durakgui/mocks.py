@@ -1,4 +1,4 @@
-from durakui.view import DurakTable
+from durakgui.view import DurakTable
 
 
 def mock_table_action(table: DurakTable, id):

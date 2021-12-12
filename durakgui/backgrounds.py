@@ -2,7 +2,7 @@ import pygame
 from pygame.sprite import Sprite
 from pygame.surface import Surface
 
-from durakui.settings import (
+from durakgui.settings import (
     TABLE_BACKGROUND_WIDTH,
     TABLE_BACKGROUND_HEIGHT,
     BATTLEFIELD_WIDTH,

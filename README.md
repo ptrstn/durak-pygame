@@ -2,7 +2,7 @@
 
 # Durak pygame GUI
 
-Dummy [Durak](https://en.wikipedia.org/wiki/Durak) GUI implemented in pygame with no functionality.
+Dummy [Durak](https://en.wikipedia.org/wiki/Durak) GUI implemented in [python](https://www.python.org/) using [pygame](https://www.pygame.org/) with no functionality.
 
 ![gameplay](docs/gameplay.gif)
 
